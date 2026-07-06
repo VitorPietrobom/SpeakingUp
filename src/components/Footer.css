@@ -1,0 +1,30 @@
+.su-footer {
+  background: var(--su-footer-bg);
+  color: var(--su-footer-text);
+}
+
+.su-footer-bar {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.su-footer-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--su-white);
+}
+
+.su-footer-accent {
+  color: var(--su-yellow);
+}
+
+.su-footer-contact {
+  font-size: 13px;
+  color: #85a2c4;
+}

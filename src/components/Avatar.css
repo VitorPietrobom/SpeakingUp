@@ -1,0 +1,16 @@
+.su-avatar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.su-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eaf0fa;
+  color: var(--su-cobalt);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
