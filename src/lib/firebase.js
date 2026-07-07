@@ -8,6 +8,7 @@ const config = {
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 }
 
 export const firebaseEnabled = Boolean(config.apiKey && config.projectId && config.appId)
@@ -29,7 +30,17 @@ async function init() {
   const [{ initializeApp }, { getAuth, signInAnonymously }, { getFirestore, doc, getDoc, setDoc }] =
     await Promise.all([import('firebase/app'), import('firebase/auth'), import('firebase/firestore')])
   const app = initializeApp(config)
+  if (config.measurementId) startAnalytics(app)
   const { user } = await signInAnonymously(getAuth(app))
   const db = getFirestore(app)
   return { uid: user.uid, progressRef: doc(db, 'progress', user.uid), getDoc, setDoc }
+}
+
+async function startAnalytics(app) {
+  try {
+    const { getAnalytics, isSupported } = await import('firebase/analytics')
+    if (await isSupported()) getAnalytics(app)
+  } catch {
+    // analytics blocked (ad blocker / unsupported env) — never break the app for it
+  }
 }
