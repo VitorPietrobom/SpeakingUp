@@ -7,7 +7,7 @@ export default function Footer() {
         <span className="su-footer-logo">
           Speaking<span className="su-footer-accent"> UP</span>
         </span>
-        <span className="su-footer-contact">speakingup.communication@gmail.com · © 2025</span>
+        <span className="su-footer-contact">speakingup.communication@gmail.com · © {new Date().getFullYear()}</span>
       </div>
     </footer>
   )

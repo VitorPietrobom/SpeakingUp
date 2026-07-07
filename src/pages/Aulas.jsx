@@ -22,7 +22,7 @@ export default function Aulas() {
       <section>
         <div className="su-wrap su-aulas-list-inner">
           <div className="su-aulas-list-head">
-            <h2>6 trilhas disponíveis</h2>
+            <h2>{trilhas.length} trilhas disponíveis</h2>
             <span>Nível sugerido em cada card · você pode pular a ordem</span>
           </div>
           <div className="su-trilhas">

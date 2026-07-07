@@ -98,6 +98,10 @@ export default function SpeakingGame({
     if (nextIdx >= ord.length) {
       nextIdx = 0
       useOrder = shuffle(scenarios.length)
+      // Don't show the scenario that just ended twice in a row across the reshuffle.
+      if (useOrder.length > 1 && useOrder[0] === ord[ord.length - 1]) {
+        ;[useOrder[0], useOrder[useOrder.length - 1]] = [useOrder[useOrder.length - 1], useOrder[0]]
+      }
     }
     setOrder(useOrder)
     setIdx(nextIdx)
@@ -166,7 +170,7 @@ export default function SpeakingGame({
                       strokeDashoffset={dash}
                     />
                   </svg>
-                  <div className="su-game-ring-time" style={{ color: ringColor }}>
+                  <div className="su-game-ring-time" role="timer" aria-label="Segundos restantes" style={{ color: ringColor }}>
                     {Math.max(0, timeLeft)}
                   </div>
                 </div>
@@ -228,6 +232,7 @@ export default function SpeakingGame({
                       <button
                         key={label}
                         onClick={() => toggleCheck(i)}
+                        aria-pressed={on}
                         className={`su-check${on ? ' on' : ''}`}
                       >
                         <span className="su-check-box">{on ? '✓' : ''}</span>

@@ -13,7 +13,7 @@ function initialsOf(name) {
 export default function Avatar({ photo, name, size }) {
   const style = { width: size, height: size, fontSize: Math.round(size * 0.32) }
   if (photo) {
-    return <img src={photo} alt={name} className="su-avatar" style={style} />
+    return <img src={photo} alt={name} loading="lazy" className="su-avatar" style={style} />
   }
   return (
     <div className="su-avatar su-avatar-fallback" style={style}>

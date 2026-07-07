@@ -40,7 +40,7 @@ export default function TopNav() {
           <button
             onClick={() => setOpen((o) => !o)}
             className="su-burger"
-            aria-label="Abrir menu"
+            aria-label={open ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={open}
           >
             <span />

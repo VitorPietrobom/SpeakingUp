@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import TopNav from '../components/TopNav.jsx'
 import Footer from '../components/Footer.jsx'
 import SpeakingGame from '../components/SpeakingGame.jsx'
@@ -73,9 +74,9 @@ export default function Home() {
                 desenvolver a comunicação para os estudos, a vida e o mercado de trabalho.
               </p>
               <div className="su-hero-ctas">
-                <a href="/aulas" className="su-hero-cta-primary">
+                <Link to="/aulas" className="su-hero-cta-primary">
                   Comece agora a aprender <span>→</span>
-                </a>
+                </Link>
                 <a href="#jogo" className="su-hero-cta-secondary">
                   <span className="su-eyebrow-dot" /> Jogar o Jogo Rápido
                 </a>
