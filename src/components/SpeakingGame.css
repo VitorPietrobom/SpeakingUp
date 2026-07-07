@@ -65,6 +65,17 @@
   border-radius: 999px;
 }
 
+.su-game-lifetime {
+  margin: 16px 0 -4px;
+  font-size: 13.5px;
+  color: var(--su-cobalt);
+}
+
+.su-game-lifetime strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
 .su-game-start {
   margin-top: 18px;
   padding: 16px 34px;

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { addRound, loadProgress, syncProgress } from '../lib/progress.js'
 import './SpeakingGame.css'
 
 function shuffle(n) {
@@ -27,6 +28,7 @@ export default function SpeakingGame({
   computeGain,
   feedbackFor,
   intro,
+  persistKey,
 }) {
   const [phase, setPhase] = useState('intro')
   const [order, setOrder] = useState(null)
@@ -36,9 +38,22 @@ export default function SpeakingGame({
   const [rounds, setRounds] = useState(0)
   const [lastGain, setLastGain] = useState(0)
   const [checks, setChecks] = useState([])
+  const [lifetime, setLifetime] = useState(() => (persistKey ? loadProgress(persistKey) : null))
   const timerRef = useRef(null)
+  const revealedRef = useRef(false)
 
   useEffect(() => () => clearInterval(timerRef.current), [])
+
+  useEffect(() => {
+    if (!persistKey) return
+    let alive = true
+    syncProgress(persistKey).then((p) => {
+      if (alive) setLifetime(p)
+    })
+    return () => {
+      alive = false
+    }
+  }, [persistKey])
 
   const runTimer = (duration, onZero) => {
     clearInterval(timerRef.current)
@@ -76,6 +91,7 @@ export default function SpeakingGame({
   const toReflect = () => {
     clearInterval(timerRef.current)
     setChecks([])
+    revealedRef.current = false
     setPhase('reflect')
   }
 
@@ -84,10 +100,14 @@ export default function SpeakingGame({
   }
 
   const reveal = () => {
+    // Guard against a double click awarding (and persisting) the round twice.
+    if (revealedRef.current) return
+    revealedRef.current = true
     const gain = computeGain(checks.length)
     setScore((s) => s + gain)
     setRounds((r) => r + 1)
     setLastGain(gain)
+    if (persistKey) setLifetime(addRound(persistKey, gain))
     setPhase('reveal')
   }
 
@@ -135,6 +155,12 @@ export default function SpeakingGame({
                   <span key={step}>{step}</span>
                 ))}
               </div>
+            )}
+            {lifetime && lifetime.rounds > 0 && (
+              <p className="su-game-lifetime">
+                Seu histórico: <strong>{lifetime.score}</strong> pontos de voz em{' '}
+                <strong>{lifetime.rounds}</strong> {lifetime.rounds === 1 ? 'rodada' : 'rodadas'}
+              </p>
             )}
             <button onClick={start} className="su-btn-primary su-game-start">
               {intro.buttonLabel}
