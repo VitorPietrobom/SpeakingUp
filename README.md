@@ -44,3 +44,32 @@ When the env vars are present, visitors are signed in anonymously and their
 progress mirrors to Firestore (local and cloud totals are merged by taking the
 max of each counter). When they're absent the Firebase SDK is never even
 loaded by the browser.
+
+## Editable content (Firestore)
+
+The Aulas trilhas and the Treinamento "exercícios de oratória" can be edited
+in the Firebase console without touching code or redeploying. The bundled
+data in `src/data/` renders instantly and stays the fallback; when a
+Firestore collection of the same name has documents, it takes over.
+
+Collections and their fields (all strings unless noted):
+
+- **`trilhas`** — `order` (number), `theme`, `icon` (emoji), `color` (hex),
+  `level` (`Iniciante` | `Intermediário` | `Avançado` — badge colors derive
+  from it), `title`, `desc`, `aulas` (number), `horas`
+- **`formats`** — `order` (number), `icon` (emoji), `title`, `desc`, `time`,
+  `bg` (hex), `color` (hex)
+
+To populate them the first time, generate a service-account key (Project
+settings → Service accounts → *Generate new private key* — keep it out of
+git) and run:
+
+```bash
+npm run seed -- caminho/para/service-account.json
+```
+
+The script copies the bundled defaults into Firestore (idempotent — safe to
+re-run). After that, edit documents directly in the console: Firestore
+Database → `trilhas` / `formats`. Remember to publish the updated
+`firestore.rules` (content collections are world-readable, nothing is
+client-writable).

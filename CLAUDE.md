@@ -82,6 +82,19 @@ dynamically imports the SDK only when configured — every cloud call is
 wrapped so failures degrade silently to local-only. Keep that contract: the
 site must fully work with no `.env` and no network.
 
+### Editable content collections
+
+`src/lib/content.js` exposes `useContent(collection, fallback, mapItem?)`:
+pages render the bundled `src/data/` array immediately and swap in the
+same-shaped Firestore collection once fetched (docs sorted by numeric
+`order`; empty/missing collection or any error keeps the fallback). Wired
+for `trilhas` (Aulas; `mapItem` = `applyLevelStyle` so editors only set
+`level`) and `formats` (Treinamento). To make another data bank editable,
+follow that pattern and add a world-readable match block for the collection
+in `firestore.rules`. `npm run seed -- <service-account.json>` copies the
+bundled defaults into Firestore (`scripts/seed-content.mjs`, idempotent,
+dependency-free).
+
 ### Shared components vs. per-page styling
 
 - `TopNav` — sticky header + mobile hamburger/panel; nav item active-state

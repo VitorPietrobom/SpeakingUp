@@ -6,6 +6,14 @@ service cloud.firestore {
     match /progress/{uid} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }
+    // Editable site content: anyone can read; editing happens in the
+    // Firebase console (admin access bypasses these rules).
+    match /trilhas/{id} {
+      allow read: if true;
+    }
+    match /formats/{id} {
+      allow read: if true;
+    }
     match /{document=**} {
       allow read, write: if false;
     }

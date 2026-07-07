@@ -6,8 +6,9 @@ import {
   treinoCheckLabels,
   treinoComputeGain,
   treinoFeedbackFor,
-  formats,
+  formats as bundledFormats,
 } from '../data/treinoScenarios.js'
+import { useContent } from '../lib/content.js'
 import './Treinamento.css'
 
 const gameIntro = {
@@ -20,6 +21,7 @@ const gameIntro = {
 }
 
 export default function Treinamento() {
+  const formats = useContent('formats', bundledFormats)
   return (
     <div className="su-page">
       <TopNav />

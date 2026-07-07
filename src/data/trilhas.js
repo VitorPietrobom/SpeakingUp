@@ -67,4 +67,9 @@ const RAW = [
   },
 ]
 
-export const trilhas = RAW.map((t) => ({ ...t, ...LEVEL_STYLE[t.level] }))
+// Editors (Firestore docs) only set `level`; the badge colors derive from it.
+export function applyLevelStyle(t) {
+  return { ...(LEVEL_STYLE[t.level] || LEVEL_STYLE.Iniciante), ...t }
+}
+
+export const trilhas = RAW.map(applyLevelStyle)

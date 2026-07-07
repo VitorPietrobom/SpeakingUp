@@ -27,13 +27,17 @@ export function getFirebase() {
 }
 
 async function init() {
-  const [{ initializeApp }, { getAuth, signInAnonymously }, { getFirestore, doc, getDoc, setDoc }] =
-    await Promise.all([import('firebase/app'), import('firebase/auth'), import('firebase/firestore')])
+  const [{ initializeApp }, { getAuth, signInAnonymously }, firestore] = await Promise.all([
+    import('firebase/app'),
+    import('firebase/auth'),
+    import('firebase/firestore'),
+  ])
+  const { getFirestore, doc, getDoc, setDoc, collection, getDocs } = firestore
   const app = initializeApp(config)
   if (config.measurementId) startAnalytics(app)
   const { user } = await signInAnonymously(getAuth(app))
   const db = getFirestore(app)
-  return { uid: user.uid, progressRef: doc(db, 'progress', user.uid), getDoc, setDoc }
+  return { uid: user.uid, db, progressRef: doc(db, 'progress', user.uid), getDoc, setDoc, collection, getDocs }
 }
 
 async function startAnalytics(app) {

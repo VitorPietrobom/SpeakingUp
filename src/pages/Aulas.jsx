@@ -1,9 +1,11 @@
 import TopNav from '../components/TopNav.jsx'
 import Footer from '../components/Footer.jsx'
-import { trilhas } from '../data/trilhas.js'
+import { trilhas as bundledTrilhas, applyLevelStyle } from '../data/trilhas.js'
+import { useContent } from '../lib/content.js'
 import './Aulas.css'
 
 export default function Aulas() {
+  const trilhas = useContent('trilhas', bundledTrilhas, applyLevelStyle)
   return (
     <div className="su-page">
       <TopNav />
