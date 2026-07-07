@@ -55,6 +55,7 @@ export default function Treinamento() {
             computeGain={treinoComputeGain}
             feedbackFor={treinoFeedbackFor}
             intro={gameIntro}
+            persistKey="treino"
           />
         </div>
       </section>

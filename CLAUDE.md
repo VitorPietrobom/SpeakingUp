@@ -68,6 +68,20 @@ Per-page scenario/format data lives in `src/data/` (`homeScenarios.js`,
 Treinamento's exercise cards) and is imported into the page, not into
 `SpeakingGame` itself.
 
+### Persistence & optional Firebase backend
+
+`SpeakingGame` takes an optional `persistKey` prop ("home" / "treino"); when
+set, each revealed round adds to a lifetime score/rounds counter shown on the
+intro card. Persistence lives in `src/lib/progress.js`: localStorage is the
+source of truth (key `su-progress-v1`), and when Firebase is configured the
+same object mirrors to Firestore at `progress/{uid}` (anonymous auth), with
+local/cloud counters reconciled by taking the max of each — they only ever
+grow, so max is a safe merge. `src/lib/firebase.js` reads `VITE_FIREBASE_*`
+env vars (see `.env.example`; security rules in `firestore.rules`) and
+dynamically imports the SDK only when configured — every cloud call is
+wrapped so failures degrade silently to local-only. Keep that contract: the
+site must fully work with no `.env` and no network.
+
 ### Shared components vs. per-page styling
 
 - `TopNav` — sticky header + mobile hamburger/panel; nav item active-state

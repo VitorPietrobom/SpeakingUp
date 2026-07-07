@@ -161,6 +161,7 @@ export default function Home() {
             computeGain={homeComputeGain}
             feedbackFor={homeFeedbackFor}
             intro={gameIntro}
+            persistKey="home"
           />
         </div>
       </section>
