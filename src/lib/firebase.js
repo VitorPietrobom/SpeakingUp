@@ -13,7 +13,28 @@ const config = {
 
 export const firebaseEnabled = Boolean(config.apiKey && config.projectId && config.appId)
 
-let instance = null
+let appInstance = null
+
+/**
+ * Resolves to the initialized Firebase App (shared by every feature that
+ * needs one — progress sync, modulos content — so we never call
+ * `initializeApp` more than once), or `null` when not configured /
+ * unreachable. Never throws — callers treat null as "offline".
+ */
+export function getApp() {
+  if (!firebaseEnabled) return Promise.resolve(null)
+  if (!appInstance) appInstance = initApp().catch(() => null)
+  return appInstance
+}
+
+async function initApp() {
+  const { initializeApp } = await import('firebase/app')
+  const app = initializeApp(config)
+  if (config.measurementId) startAnalytics(app)
+  return app
+}
+
+let authInstance = null
 
 /**
  * Resolves to `{ uid, progressRef, getDoc, setDoc }` once the SDK is loaded
@@ -22,15 +43,17 @@ let instance = null
  */
 export function getFirebase() {
   if (!firebaseEnabled) return Promise.resolve(null)
-  if (!instance) instance = init().catch(() => null)
-  return instance
+  if (!authInstance) authInstance = initAuth().catch(() => null)
+  return authInstance
 }
 
-async function init() {
-  const [{ initializeApp }, { getAuth, signInAnonymously }, { getFirestore, doc, getDoc, setDoc }] =
-    await Promise.all([import('firebase/app'), import('firebase/auth'), import('firebase/firestore')])
-  const app = initializeApp(config)
-  if (config.measurementId) startAnalytics(app)
+async function initAuth() {
+  const app = await getApp()
+  if (!app) return null
+  const [{ getAuth, signInAnonymously }, { getFirestore, doc, getDoc, setDoc }] = await Promise.all([
+    import('firebase/auth'),
+    import('firebase/firestore'),
+  ])
   const { user } = await signInAnonymously(getAuth(app))
   const db = getFirestore(app)
   return { uid: user.uid, progressRef: doc(db, 'progress', user.uid), getDoc, setDoc }

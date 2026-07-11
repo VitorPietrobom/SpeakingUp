@@ -2,12 +2,13 @@ import TopNav from '../components/TopNav.jsx'
 import Footer from '../components/Footer.jsx'
 import Avatar from '../components/Avatar.jsx'
 import { team } from '../data/team.js'
+import { formats } from '../data/treinoScenarios.js'
 import './Organizacao.css'
 
 const STATS = [
   { num: '21', label: 'desafios de fala no Jogo Rápido' },
-  { num: '6', label: 'trilhas de habilidades de comunicação' },
-  { num: '3', label: 'alunas na equipe, por alunos para alunos' },
+  { num: String(formats.length), label: 'exercícios guiados de oratória' },
+  { num: String(team.length), label: 'alunas na equipe, por alunos para alunos' },
   { num: '0', label: 'julgamento quando você erra treinando' },
 ]
 
@@ -115,8 +116,8 @@ export default function Organizacao() {
           <span className="su-eyebrow">A equipe</span>
           <h2>Quem faz a Speaking UP</h2>
           <p className="su-org-team-lead">
-            Duas fundadoras e uma colaboradora, unidas pela mesma vontade: que nenhum jovem perca uma oportunidade
-            por não saber se expressar.
+            Duas fundadoras, unidas pela mesma vontade: que nenhum jovem perca uma oportunidade por não saber se
+            expressar.
           </p>
           <div className="su-team">
             {team.map((m) => (

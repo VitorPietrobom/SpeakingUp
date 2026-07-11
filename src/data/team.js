@@ -1,6 +1,9 @@
 import helenaPhoto from '../assets/helena.jpg'
 import larissaPhoto from '../assets/larissa.jpg'
 
+// Two co-founders: Helena Charnet and Larissa Takamine. ("Yasmin" was a
+// mis-transcription of "Larissa" in the founders' intro video — there is no
+// third person.)
 export const team = [
   {
     name: 'Helena Charnet',
@@ -10,15 +13,8 @@ export const team = [
     photo: helenaPhoto,
   },
   {
-    name: 'Yasmin',
-    role: 'Co-fundadora',
-    quote: 'Falar bem é pra todo mundo — e começa por um lugar seguro pra tentar.',
-    bio: 'Co-fundou a Speaking UP ao lado da Helena, movida pela vontade de que ninguém deixe de dizer o que pensa por falta de preparo. (Bio em breve — Yasmin ainda vai contar a própria história com a fala em público.)',
-    photo: null,
-  },
-  {
     name: 'Larissa Takamine',
-    role: 'Colaboradora',
+    role: 'Co-fundadora',
     quote: 'Que outros jovens explorem sua comunicação e fiquem mais confiantes em si.',
     bio: 'Desde pequena, falar em público nunca foi natural para mim — sempre sofri com nervosismo e medo do julgamento alheio. Mas, ano passado, a participação em debates e simulações da ONU mudou minha relação com a fala. Agora, a partir do Speaking UP, gostaria que outros jovens explorassem sua comunicação para tornarem-se mais confiantes em si.',
     photo: larissaPhoto,

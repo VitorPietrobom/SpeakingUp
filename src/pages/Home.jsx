@@ -43,8 +43,8 @@ const FEATURES = [
 const gameIntro = {
   title: 'Bora destravar a fala?',
   description:
-    'Você recebe um desafio do dia a dia profissional, tem alguns segundos pra montar a ideia e fala em voz alta. No fim, marca o que foi bem e leva uma técnica nova. Quanto mais honesta na reflexão, mais você evolui.',
-  steps: ['1 · Pense', '2 · Fale em voz alta', '3 · Reflita & evolua'],
+    'Você recebe um tema aleatório e possui 1 minuto para discursar sobre. No fim, responde ao autofeedback para acessar aulas baseadas em suas dificuldades e recebe pontos conforme seu desempenho.',
+  steps: ['Planeje sua argumentação', 'Fale em voz alta, olhe para frente', 'De preferência, de pé e na frente de um espelho'],
   buttonLabel: 'Começar jogo →',
   footnote: '11 desafios reais • feito pra fazer sozinha, em qualquer lugar',
 }
@@ -68,10 +68,11 @@ export default function Home() {
                 <span className="su-hero-title-accent">Que tal dizê-la bem?</span>
               </h1>
               <p className="su-hero-copy">
-                A escola quase não ensina a falar em público — e isso trava gente boa na hora que mais importa. A
-                Speaking UP nasceu para mudar isso: uma iniciativa{' '}
-                <strong className="su-strong-ink">pensada por alunos, para alunos</strong>, que ajuda jovens a
-                desenvolver a comunicação para os estudos, a vida e o mercado de trabalho.
+                A prática da comunicação é essencial na evolução pessoal de qualquer um. Sem ela, dificuldades
+                sociais e psicológicas tendem a tomar indivíduos no momento da fala. Ainda assim, as escolas pouco
+                valorizam o treinamento da fala em público. Por isso, a Speaking UP nasce como uma tentativa de
+                superar esse cenário, desenvolvendo a comunicação para os estudos, a vida e o mercado de trabalho.
+                Uma verdadeira iniciativa <strong className="su-strong-ink">pensada por jovens, para jovens</strong>.
               </p>
               <div className="su-hero-ctas">
                 <Link to="/aulas" className="su-hero-cta-primary">
@@ -149,13 +150,14 @@ export default function Home() {
             <span className="su-eyebrow">Feature interativa</span>
             <h2>Jogo Rápido de Fala</h2>
             <p>
-              Um desafio real de comunicação, segundos pra pensar e o convite: <strong className="su-strong-ink">fale em voz alta</strong>.
-              Depois você reflete sobre como foi e leva uma técnica pra mandar melhor. Sem microfone, sem julgamento — só treino.
+              Temas aleatórios, fala cronometrada e um feedback ao final. Treine o raciocínio e a fala de forma
+              prática e completamente acessível diretamente de seu dispositivo e ausente de qualquer julgamento.
+              Depois, analise seu progresso respondendo algumas perguntas do Autofeedback.
             </p>
           </div>
           <SpeakingGame
             scenarios={homeScenarios}
-            prepTime={12}
+            prepTime={60}
             speakTime={40}
             checkLabels={homeCheckLabels}
             computeGain={homeComputeGain}

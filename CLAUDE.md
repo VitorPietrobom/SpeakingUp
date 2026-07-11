@@ -66,21 +66,37 @@ pattern when touching this file.
 Per-page scenario/format data lives in `src/data/` (`homeScenarios.js`,
 `treinoScenarios.js` — which also exports the `formats` list for
 Treinamento's exercise cards) and is imported into the page, not into
-`SpeakingGame` itself.
+`SpeakingGame` itself. `src/data/` only holds this kind of static, built-in
+content (scenarios, team bios) — Aulas content is the one exception, served
+from Firestore instead (see below).
 
-### Persistence & optional Firebase backend
+### Firebase: shared app init, two independent features
 
-`SpeakingGame` takes an optional `persistKey` prop ("home" / "treino"); when
-set, each revealed round adds to a lifetime score/rounds counter shown on the
-intro card. Persistence lives in `src/lib/progress.js`: localStorage is the
-source of truth (key `su-progress-v1`), and when Firebase is configured the
-same object mirrors to Firestore at `progress/{uid}` (anonymous auth), with
-local/cloud counters reconciled by taking the max of each — they only ever
-grow, so max is a safe merge. `src/lib/firebase.js` reads `VITE_FIREBASE_*`
-env vars (see `.env.example`; security rules in `firestore.rules`) and
-dynamically imports the SDK only when configured — every cloud call is
-wrapped so failures degrade silently to local-only. Keep that contract: the
-site must fully work with no `.env` and no network.
+`src/lib/firebase.js` reads `VITE_FIREBASE_*` env vars (see `.env.example`;
+security rules in `firestore.rules`), exposes `firebaseEnabled` (true only
+when the required vars are present), and a memoized `getApp()` that lazily
+`import()`s and initializes the SDK exactly once. Both features below build
+on `getApp()` — never call `initializeApp` directly elsewhere, the SDK throws
+if it's initialized twice. Every Firebase call in both features is wrapped so
+failures degrade silently. Keep that contract: the site must fully work with
+no `.env` and no network.
+
+- **Game progress** (`src/lib/progress.js`) — `SpeakingGame` takes an
+  optional `persistKey` prop (`"home"` / `"treino"`); each revealed round
+  adds to a lifetime score/rounds counter shown on the intro card.
+  localStorage (key `su-progress-v1`) is the source of truth; when Firebase
+  is configured the same object mirrors to Firestore at `progress/{uid}`
+  behind anonymous auth (`getFirebase()`, layered on `getApp()`), with
+  local/cloud counters reconciled by taking the max of each — they only ever
+  grow, so max is a safe merge.
+- **Aulas content** (`src/lib/modulos.js`) — the Aulas page has *no* local
+  fallback data; `subscribeModulos(onChange)` live-subscribes (`onSnapshot`)
+  to the public `modulos` Firestore collection (read: public, write: console
+  / Admin SDK only — see `firestore.rules`) and calls back with `null`
+  (unconfigured/unreachable), `[]` (configured, nothing published), or the
+  sorted módulo list. No auth needed for this one, since it's public content,
+  not per-user data. See the README's "Publishing Aulas content" section for
+  the document shape.
 
 ### Shared components vs. per-page styling
 
@@ -88,12 +104,16 @@ site must fully work with no `.env` and no network.
   comes from `react-router-dom`'s `NavLink`, not manual path comparisons.
 - `Footer` — identical on every page.
 - `Avatar` — takes `{ photo, name, size }`; renders the photo if present,
-  otherwise a circular initials fallback (this is how team members without a
-  photo asset are handled — see `Yasmin` in `src/data/team.js`, which has
-  `photo: null`).
+  otherwise a circular initials fallback for a team member without a photo
+  asset yet (`photo: null` in `src/data/team.js`). Both current team members
+  have photos, so this path isn't exercised right now, but keep it working
+  for whenever a new member joins without one.
 - `src/data/team.js` is shared between the Home page's team grid and the
   Organizacao page's team bios — it holds both the short home-page `quote`
-  and the longer Organizacao `bio` per person.
+  and the longer Organizacao `bio` per person. There are two co-founders,
+  Helena Charnet and Larissa Takamine — no third person ("Yasmin" was a
+  mis-transcription of "Larissa" in the founders' intro video, not a real
+  team member; don't reintroduce it).
 
 Styling is plain CSS files (one per component/page, imported directly into
 the matching `.jsx`), not CSS modules or a utility framework. Shared design

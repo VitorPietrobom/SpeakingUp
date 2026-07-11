@@ -13,8 +13,8 @@ import './Treinamento.css'
 const gameIntro = {
   title: '10 desafios de oratória pra praticar',
   description:
-    'Encare situações reais de fala em público, sustente por mais tempo e refine a entrega a cada rodada. O segredo não é talento — é o número de repetições.',
-  steps: [],
+    'Você recebe um tema aleatório e possui 1 minuto para discursar sobre. No fim, responde ao autofeedback para acessar aulas baseadas em suas dificuldades e recebe pontos conforme seu desempenho.',
+  steps: ['Planeje sua argumentação', 'Fale em voz alta, olhe para frente', 'De preferência, de pé e na frente de um espelho'],
   buttonLabel: 'Começar treino →',
   footnote: '',
 }
@@ -42,14 +42,14 @@ export default function Treinamento() {
             <span className="su-eyebrow">Modo Treino</span>
             <h2>Jogo Rápido de Fala · sessão de oratória</h2>
             <p>
-              Mesma mecânica do início, com desafios mais longos pra você{' '}
-              <strong className="su-strong-ink">construir o hábito</strong> de pensar rápido e falar com estrutura.
-              Pense, fale em voz alta, reflita e leve a técnica.
+              Temas aleatórios, fala cronometrada e um feedback ao final. Treine o raciocínio e a fala de forma
+              prática e completamente acessível diretamente de seu dispositivo e ausente de qualquer julgamento.
+              Depois, analise seu progresso respondendo algumas perguntas do Autofeedback.
             </p>
           </div>
           <SpeakingGame
             scenarios={treinoScenarios}
-            prepTime={15}
+            prepTime={60}
             speakTime={60}
             checkLabels={treinoCheckLabels}
             computeGain={treinoComputeGain}

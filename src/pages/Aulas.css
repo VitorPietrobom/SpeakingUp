@@ -53,13 +53,13 @@
   color: var(--su-muted);
 }
 
-.su-trilhas {
+.su-modulos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
 }
 
-.su-trilha-card {
+.su-modulo-card {
   display: flex;
   flex-direction: column;
   background: var(--su-white);
@@ -69,29 +69,29 @@
   transition: border-color 120ms ease;
 }
 
-.su-trilha-card:hover {
+.su-modulo-card:hover {
   border-color: var(--su-cobalt);
 }
 
-.su-trilha-bar {
+.su-modulo-bar {
   height: 8px;
 }
 
-.su-trilha-body {
+.su-modulo-body {
   padding: 22px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.su-trilha-top {
+.su-modulo-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
-.su-trilha-theme {
+.su-modulo-theme {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -99,7 +99,7 @@
   font-weight: 600;
 }
 
-.su-trilha-level {
+.su-modulo-level {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -108,7 +108,7 @@
   border-radius: 999px;
 }
 
-.su-trilha-body h3 {
+.su-modulo-body h3 {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 20px;
@@ -117,7 +117,7 @@
   margin: 14px 0 0;
 }
 
-.su-trilha-body p {
+.su-modulo-body p {
   font-size: 14.5px;
   color: var(--su-body);
   line-height: 1.5;
@@ -125,7 +125,7 @@
   flex: 1;
 }
 
-.su-trilha-meta {
+.su-modulo-meta {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -135,8 +135,30 @@
   font-weight: 500;
 }
 
-.su-trilha-meta span {
+.su-modulo-meta span {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+.su-modulos-empty {
+  background: var(--su-white);
+  border: 1px dashed var(--su-border-strong);
+  border-radius: 20px;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.su-modulos-empty p:first-child {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--su-ink);
+}
+
+.su-modulos-empty-sub {
+  margin: 8px 0 0;
+  font-size: 14.5px;
+  color: var(--su-body);
 }
