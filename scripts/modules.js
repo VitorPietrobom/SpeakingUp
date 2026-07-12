@@ -25,4 +25,16 @@
 //   order: 1,
 // },
 
-export const modules = []
+export const modules = [
+  {
+    theme: 'Presença & voz',
+    icon: '🎙️',
+    color: '#7A3FB8',
+    level: 'Intermediário',
+    title: 'Postura, olhar e o poder das pausas',
+    desc: 'O que seu corpo diz enquanto você fala. Use voz, ritmo e silêncio a seu favor.',
+    aulas: 6,
+    horas: '~2h00',
+    order: 1,
+  },
+]

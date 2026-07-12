@@ -11,7 +11,7 @@
     "seed:modules": "node scripts/seed-modules.js"
   },
   "dependencies": {
-    "firebase": "^12.15.0",
+    "firebase": "^12.16.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1"
