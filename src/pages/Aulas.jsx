@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import TopNav from '../components/TopNav.jsx'
 import Footer from '../components/Footer.jsx'
-import { subscribeModulos } from '../lib/modulos.js'
+import { subscribeModules } from '../lib/modules.js'
 import './Aulas.css'
 
 export default function Aulas() {
-  // undefined = loading, null = unconfigured/unreachable, [] = configured but empty, [...] = módulos
-  const [modulos, setModulos] = useState(undefined)
+  // undefined = loading, null = unconfigured/unreachable, [] = configured but empty, [...] = modules
+  const [modules, setModules] = useState(undefined)
 
-  useEffect(() => subscribeModulos(setModulos), [])
+  useEffect(() => subscribeModules(setModules), [])
 
-  const list = modulos || []
-  const hasModulos = Array.isArray(modulos) && modulos.length > 0
+  const list = modules || []
+  const hasModules = Array.isArray(modules) && modules.length > 0
 
   return (
     <div className="su-page">
@@ -31,28 +31,28 @@ export default function Aulas() {
       <section>
         <div className="su-wrap su-aulas-list-inner">
           <div className="su-aulas-list-head">
-            <h2>{hasModulos ? `${modulos.length} módulos disponíveis` : 'Módulos'}</h2>
+            <h2>{hasModules ? `${modules.length} módulos disponíveis` : 'Módulos'}</h2>
             <span>Nível sugerido em cada card · você pode pular a ordem</span>
           </div>
 
-          {hasModulos ? (
-            <div className="su-modulos">
+          {hasModules ? (
+            <div className="su-modules">
               {list.map((m) => (
-                <div key={m.id} className="su-modulo-card">
-                  <div className="su-modulo-bar" style={{ background: m.color }} />
-                  <div className="su-modulo-body">
-                    <div className="su-modulo-top">
-                      <span className="su-modulo-theme" style={{ color: m.color }}>
+                <div key={m.id} className="su-module-card">
+                  <div className="su-module-bar" style={{ background: m.color }} />
+                  <div className="su-module-body">
+                    <div className="su-module-top">
+                      <span className="su-module-theme" style={{ color: m.color }}>
                         <span>{m.icon}</span>
                         {m.theme}
                       </span>
-                      <span className="su-modulo-level" style={{ color: m.levelColor, background: m.levelBg }}>
+                      <span className="su-module-level" style={{ color: m.levelColor, background: m.levelBg }}>
                         {m.level}
                       </span>
                     </div>
                     <h3>{m.title}</h3>
                     <p>{m.desc}</p>
-                    <div className="su-modulo-meta">
+                    <div className="su-module-meta">
                       <span>▸ {m.aulas} aulas</span>
                       <span>◷ {m.horas}</span>
                     </div>
@@ -61,9 +61,9 @@ export default function Aulas() {
               ))}
             </div>
           ) : (
-            <div className="su-modulos-empty">
+            <div className="su-modules-empty">
               <p>Novos módulos em breve.</p>
-              <p className="su-modulos-empty-sub">Estamos preparando o conteúdo — volte em breve para conferir.</p>
+              <p className="su-modules-empty-sub">Estamos preparando o conteúdo — volte em breve para conferir.</p>
             </div>
           )}
         </div>

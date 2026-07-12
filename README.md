@@ -23,7 +23,7 @@ npm run dev
 - `src/pages/` — the four routed pages (Home, Aulas, Treinamento, Organização)
 - `src/components/` — shared UI: `TopNav`, `Footer`, `Avatar`, and the reusable `SpeakingGame` engine that powers the practice game on both the Home and Treinamento pages
 - `src/data/` — scenario banks and team bios
-- `src/lib/` — game-progress persistence (`progress.js`), Aulas content (`modulos.js`), and the optional
+- `src/lib/` — game-progress persistence (`progress.js`), Aulas content (`modules.js`), and the optional
   Firebase backend (`firebase.js`)
 
 ## Backend (optional Firebase)
@@ -42,7 +42,7 @@ To turn on Firebase:
 3. Create a **Cloud Firestore** database and publish the rules in
    [`firestore.rules`](firestore.rules):
    - each anonymous user can only read/write their own `progress/{uid}` document
-   - `modulos/{id}` documents are publicly readable, writable only from the
+   - `modules/{id}` documents are publicly readable, writable only from the
      console / Admin SDK (never from the client)
 4. Copy `.env.example` to `.env` and fill in the `VITE_FIREBASE_*` values from
    *Project settings → SDK setup and configuration*
@@ -54,8 +54,24 @@ loaded by the browser.
 
 ### Publishing Aulas content
 
-Add documents to a `modulos` collection in Firestore (via the console, or the
-Admin SDK) — each document is one card on the Aulas page:
+Each módulo shown on the Aulas page is one document in a `modules` Firestore
+collection. The easiest way to add or update them is the seed script — no
+console clicking, no typos in field names:
+
+1. Firebase console → **Project settings → Service accounts → "Generate new
+   private key"** — downloads a JSON key file. Save it as
+   `serviceAccountKey.json` in the repo root (already gitignored — this is a
+   secret, never commit it).
+2. Edit [`scripts/modules.js`](scripts/modules.js) — a plain array of módulo
+   objects, with the field shape documented at the top of the file.
+3. Run `npm run seed:modules`.
+
+It's safe to run repeatedly: each módulo gets a stable id derived from its
+`title`, so re-running after edits updates the existing card instead of
+creating a duplicate. The Aulas page listens live (`onSnapshot`), so
+published changes show up without a redeploy.
+
+Field shape (also documented in `scripts/modules.js`):
 
 | field    | type   | notes                                      |
 | -------- | ------ | ------------------------------------------- |
@@ -69,5 +85,5 @@ Admin SDK) — each document is one card on the Aulas page:
 | `horas`  | string | e.g. `"~2h00"`                               |
 | `order`  | number | optional; sort position (ties broken by `title`) |
 
-The Aulas page listens live (`onSnapshot`), so published changes show up
-without a redeploy.
+(You can still add/edit documents by hand in the Firestore console if you
+prefer — the script is just a shortcut for bulk or repeated edits.)

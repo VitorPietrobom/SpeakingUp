@@ -12,9 +12,9 @@ function decorate(doc) {
 
 // Firestore's orderBy() silently drops documents missing the sorted field,
 // which is an easy footgun for content edited by hand in the console — so we
-// fetch unordered and sort client-side, falling back to title when a módulo
+// fetch unordered and sort client-side, falling back to title when a module
 // has no explicit `order`.
-function sortModulos(list) {
+function sortModules(list) {
   return [...list].sort((a, b) => {
     const oa = typeof a.order === 'number' ? a.order : Infinity
     const ob = typeof b.order === 'number' ? b.order : Infinity
@@ -24,15 +24,15 @@ function sortModulos(list) {
 }
 
 /**
- * Live-subscribes to the public `modulos` Firestore collection (course
- * content for the Aulas page). Calls `onChange` with:
+ * Live-subscribes to the public `modules` Firestore collection (the "módulo"
+ * course content shown on the Aulas page). Calls `onChange` with:
  *   - null  — Firebase isn't configured, or the read failed; render an
  *             "em breve" empty state, never an error.
- *   - []    — configured and reachable, but no módulos published yet.
- *   - [...] — módulos, sorted by optional `order` then `title`.
+ *   - []    — configured and reachable, but no modules published yet.
+ *   - [...] — modules, sorted by optional `order` then `title`.
  * Returns an unsubscribe function that is always safe to call.
  */
-export function subscribeModulos(onChange) {
+export function subscribeModules(onChange) {
   if (!firebaseEnabled) {
     onChange(null)
     return () => {}
@@ -49,10 +49,10 @@ export function subscribeModulos(onChange) {
       if (!alive) return
       const db = getFirestore(app)
       unsubscribeSnapshot = onSnapshot(
-        collection(db, 'modulos'),
+        collection(db, 'modules'),
         (snap) => {
           if (!alive) return
-          onChange(sortModulos(snap.docs.map((d) => decorate({ id: d.id, ...d.data() }))))
+          onChange(sortModules(snap.docs.map((d) => decorate({ id: d.id, ...d.data() }))))
         },
         () => {
           if (alive) onChange(null)

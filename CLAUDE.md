@@ -89,14 +89,23 @@ no `.env` and no network.
   behind anonymous auth (`getFirebase()`, layered on `getApp()`), with
   local/cloud counters reconciled by taking the max of each — they only ever
   grow, so max is a safe merge.
-- **Aulas content** (`src/lib/modulos.js`) — the Aulas page has *no* local
-  fallback data; `subscribeModulos(onChange)` live-subscribes (`onSnapshot`)
-  to the public `modulos` Firestore collection (read: public, write: console
+- **Aulas content** (`src/lib/modules.js`) — the Aulas page has *no* local
+  fallback data; `subscribeModules(onChange)` live-subscribes (`onSnapshot`)
+  to the public `modules` Firestore collection (read: public, write: console
   / Admin SDK only — see `firestore.rules`) and calls back with `null`
   (unconfigured/unreachable), `[]` (configured, nothing published), or the
-  sorted módulo list. No auth needed for this one, since it's public content,
-  not per-user data. See the README's "Publishing Aulas content" section for
-  the document shape.
+  sorted module list. No auth needed for this one, since it's public content,
+  not per-user data. Note the naming split: the collection/file/code is
+  English (`modules`), matching every other `src/lib/` file, while the UI
+  copy it renders is the Portuguese "módulo" — same pattern as the rest of
+  the codebase (English identifiers, Portuguese content). See the README's
+  "Publishing Aulas content" section for the document shape. Content is
+  authored via `scripts/seed-modules.js` (`npm run seed:modules`, needs a
+  gitignored `serviceAccountKey.json`) reading from `scripts/modules.js` —
+  a plain array, so bulk edits stay a one-file diff rather than N console
+  clicks. This uses `firebase-admin` (devDependency, Node-only) — do not
+  import it from `src/`, which only ever talks to Firestore through the
+  client SDK in `firebase.js`.
 
 ### Shared components vs. per-page styling
 
