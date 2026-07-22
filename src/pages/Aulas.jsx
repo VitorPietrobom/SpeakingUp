@@ -22,8 +22,10 @@ export default function Aulas() {
           <span className="su-eyebrow">Aulas</span>
           <h1>As habilidades que te fazem falar com confiança.</h1>
           <p>
-            Cada módulo junta aulas curtas e práticas sobre um pilar da comunicação — da estrutura da fala ao
-            controle do nervosismo. Comece pelo que mais te trava hoje.
+            Um aprendizado efetivo é aquele que equilibra qualidade e versatilidade. Por isso, cada módulo explora
+            um tema da comunicação por meio de aulas escritas e videoaulas longas e curtas. As aulas também são
+            focadas nas principais dificuldades dos jovens e baseadas em pesquisas e experiências de comunicadores.
+            Comece agora com o que mais te desafia!
           </p>
         </div>
       </section>

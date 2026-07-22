@@ -30,8 +30,8 @@ export default function Treinamento() {
           <span className="su-treino-eyebrow">Treinamento</span>
           <h1>Saber a teoria não solta a língua. Treinar, sim.</h1>
           <p>
-            Falar bem é repetição. Aqui você pratica em voz alta com rodadas do Jogo Rápido de Fala e exercícios
-            guiados de oratória — quantas vezes precisar, sem plateia.
+            A fala se aprimora com o treinamento constante. Aqui você pratica em voz alta com rodadas do Jogo
+            Rápido de Fala e acompanha seu desenvolvimento por meio do Autofeedback. Explore o seu modo de falar.
           </p>
         </div>
       </section>
