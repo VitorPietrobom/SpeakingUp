@@ -111,21 +111,16 @@ export const treinoScenarios = [
   },
 ]
 
-export const treinoCheckLabels = [
-  'Falei sem travar no começo',
-  'Mantive uma ideia central clara',
-  'Cuidei da postura e do ritmo',
-  'Fechei a fala com convicção',
-]
-
-export function treinoComputeGain(checksCount) {
-  return 35 + checksCount * 15
+// computeGain/feedbackFor now take the Autofeedback questionnaire's total
+// points (0-60, see src/data/autofeedback.js) instead of a checkbox count.
+export function treinoComputeGain(autofeedbackPoints) {
+  return 25 + autofeedbackPoints
 }
 
-export function treinoFeedbackFor(n) {
-  if (n >= 4) return 'Entrega completa! Esse é o nível que vira natural com repetição. Aumente o desafio na próxima.'
-  if (n >= 2) return 'Boa! Pontos sólidos marcados. Repita focando no que faltou — é assim que o hábito se constrói.'
-  if (n >= 1) return 'Um ponto já é progresso real. Cada rodada solta mais a língua. Bora de novo.'
+export function treinoFeedbackFor(points) {
+  if (points >= 50) return 'Entrega completa! Esse é o nível que vira natural com repetição. Aumente o desafio na próxima.'
+  if (points >= 30) return 'Boa! Pontos sólidos marcados. Repita focando no que faltou — é assim que o hábito se constrói.'
+  if (points >= 10) return 'Um ponto já é progresso real. Cada rodada solta mais a língua. Bora de novo.'
   return 'Você falou, e isso é o que importa hoje. Sem cobrança: repita e sinta a diferença na segunda vez.'
 }
 

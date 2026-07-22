@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { addRound, loadProgress, syncProgress } from '../lib/progress.js'
+import {
+  AUTOFEEDBACK_SECTIONS,
+  computeAutofeedbackPoints,
+  feedbackItemsFor,
+  isAutofeedbackComplete,
+} from '../data/autofeedback.js'
 import './SpeakingGame.css'
 
 function shuffle(n) {
@@ -18,13 +24,14 @@ const CIRC = 2 * Math.PI * RADIUS
  * Shared "Jogo Rápido de Fala" engine. Both the Home page and the
  * Treinamento page mount this with their own scenario bank / timings /
  * scoring so the phases (intro -> prep -> speak -> reflect -> reveal) and
- * markup stay identical between the two.
+ * markup stay identical between the two. The reflect step's Autofeedback
+ * questionnaire (src/data/autofeedback.js) is fixed content shared by both —
+ * it isn't customized per page like the scenarios are.
  */
 export default function SpeakingGame({
   scenarios,
   prepTime,
   speakTime,
-  checkLabels,
   computeGain,
   feedbackFor,
   intro,
@@ -37,7 +44,7 @@ export default function SpeakingGame({
   const [score, setScore] = useState(0)
   const [rounds, setRounds] = useState(0)
   const [lastGain, setLastGain] = useState(0)
-  const [checks, setChecks] = useState([])
+  const [answers, setAnswers] = useState({})
   const [lifetime, setLifetime] = useState(() => (persistKey ? loadProgress(persistKey) : null))
   const timerRef = useRef(null)
   const revealedRef = useRef(false)
@@ -78,7 +85,7 @@ export default function SpeakingGame({
     setScore(0)
     setRounds(0)
     setLastGain(0)
-    setChecks([])
+    setAnswers({})
     setPhase('prep')
     runTimer(prepTime, toSpeak)
   }
@@ -90,20 +97,22 @@ export default function SpeakingGame({
 
   const toReflect = () => {
     clearInterval(timerRef.current)
-    setChecks([])
+    setAnswers({})
     revealedRef.current = false
     setPhase('reflect')
   }
 
-  const toggleCheck = (i) => {
-    setChecks((cur) => (cur.includes(i) ? cur.filter((x) => x !== i) : [...cur, i]))
+  const selectAnswer = (questionId, optionId) => {
+    setAnswers((cur) => ({ ...cur, [questionId]: optionId }))
   }
 
   const reveal = () => {
     // Guard against a double click awarding (and persisting) the round twice.
     if (revealedRef.current) return
+    if (!isAutofeedbackComplete(answers)) return
     revealedRef.current = true
-    const gain = computeGain(checks.length)
+    const points = computeAutofeedbackPoints(answers)
+    const gain = computeGain(points)
     setScore((s) => s + gain)
     setRounds((r) => r + 1)
     setLastGain(gain)
@@ -126,7 +135,7 @@ export default function SpeakingGame({
     setOrder(useOrder)
     setIdx(nextIdx)
     setLastGain(0)
-    setChecks([])
+    setAnswers({})
     setPhase('prep')
     runTimer(prepTime, toSpeak)
   }
@@ -140,6 +149,9 @@ export default function SpeakingGame({
   const ringColor = low ? '#c2410c' : 'var(--su-cobalt)'
   const phaseLabel =
     phase === 'prep' ? 'Prepare-se' : phase === 'speak' ? 'Fale agora' : phase === 'reflect' ? 'Reflita' : 'Sua técnica'
+  const answeredCount = Object.keys(answers).length
+  const totalQuestions = AUTOFEEDBACK_SECTIONS.reduce((n, s) => n + s.questions.length, 0)
+  const canReveal = answeredCount === totalQuestions
 
   return (
     <div className="su-game-frame">
@@ -249,27 +261,44 @@ export default function SpeakingGame({
 
             {phase === 'reflect' && (
               <div className="su-game-reflect-wrap">
-                <p className="su-game-reflect-title">Como foi? Marque o que rolou:</p>
-                <p className="su-game-reflect-sub">Seja honesta — cada acerto vale ponto, e a reflexão é onde o aprendizado gruda.</p>
-                <div className="su-reflect">
-                  {checkLabels.map((label, i) => {
-                    const on = checks.includes(i)
-                    return (
-                      <button
-                        key={label}
-                        onClick={() => toggleCheck(i)}
-                        aria-pressed={on}
-                        className={`su-check${on ? ' on' : ''}`}
-                      >
-                        <span className="su-check-box">{on ? '✓' : ''}</span>
-                        <span>{label}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-                <button onClick={reveal} className="su-btn-primary su-game-reveal-btn">
+                <p className="su-game-reflect-title">Autofeedback: como foi?</p>
+                <p className="su-game-reflect-sub">
+                  Seja honesta em cada pergunta — é na reflexão que o aprendizado gruda.
+                </p>
+                {AUTOFEEDBACK_SECTIONS.map((section) => (
+                  <div key={section.section} className="su-af-section">
+                    <span className="su-af-section-label">{section.section}</span>
+                    {section.questions.map((q) => (
+                      <div key={q.id} className="su-af-question">
+                        <p className="su-af-question-text">{q.text}</p>
+                        <div className="su-af-options">
+                          {q.options.map((opt) => {
+                            const on = answers[q.id] === opt.id
+                            return (
+                              <button
+                                key={opt.id}
+                                onClick={() => selectAnswer(q.id, opt.id)}
+                                aria-pressed={on}
+                                className={`su-af-option${on ? ' on' : ''}`}
+                              >
+                                <span className="su-af-option-dot" />
+                                <span>{opt.label}</span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+                <button onClick={reveal} disabled={!canReveal} className="su-btn-primary su-game-reveal-btn">
                   Ver minha técnica do dia →
                 </button>
+                {!canReveal && (
+                  <p className="su-af-hint">
+                    Responda todas as perguntas para continuar ({answeredCount}/{totalQuestions})
+                  </p>
+                )}
               </div>
             )}
 
@@ -277,8 +306,19 @@ export default function SpeakingGame({
               <div className="su-game-reveal">
                 <div className="su-game-feedback">
                   <span className="su-game-gain">+{lastGain}</span>
-                  <p>{feedbackFor(checks.length)}</p>
+                  <p>{feedbackFor(computeAutofeedbackPoints(answers))}</p>
                 </div>
+
+                <div className="su-af-results">
+                  {feedbackItemsFor(answers).map((item) => (
+                    <div key={item.questionText} className="su-af-result-item">
+                      <span className="su-af-result-section">{item.section}</span>
+                      <p className="su-af-result-answer">{item.answerLabel}</p>
+                      <p className="su-af-result-feedback">{item.feedback}</p>
+                    </div>
+                  ))}
+                </div>
+
                 <div className="su-game-technique">
                   <span className="su-game-technique-label">Técnica · {sc.tech[0]}</span>
                   <p className="su-game-technique-title">{sc.tech[1]}</p>

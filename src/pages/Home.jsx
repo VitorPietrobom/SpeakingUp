@@ -4,7 +4,7 @@ import Footer from '../components/Footer.jsx'
 import SpeakingGame from '../components/SpeakingGame.jsx'
 import Avatar from '../components/Avatar.jsx'
 import { team } from '../data/team.js'
-import { homeScenarios, homeCheckLabels, homeComputeGain, homeFeedbackFor } from '../data/homeScenarios.js'
+import { homeScenarios, homeComputeGain, homeFeedbackFor } from '../data/homeScenarios.js'
 import './Home.css'
 
 const EQ_BARS = [
@@ -159,7 +159,6 @@ export default function Home() {
             scenarios={homeScenarios}
             prepTime={60}
             speakTime={40}
-            checkLabels={homeCheckLabels}
             computeGain={homeComputeGain}
             feedbackFor={homeFeedbackFor}
             intro={gameIntro}

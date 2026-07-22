@@ -43,9 +43,8 @@ props rather than being hardcoded per page:
 
 - `scenarios` — array of `{ tag, icon, text, hint, tech: [name, title, text] }`
 - `prepTime` / `speakTime` — seconds for each timed phase
-- `checkLabels` — the 4 self-assessment checkboxes shown at reflect time
-- `computeGain(checksCount)` — scoring formula
-- `feedbackFor(checksCount)` — feedback copy tiers
+- `computeGain(autofeedbackPoints)` — scoring formula (points 0-60, see below)
+- `feedbackFor(autofeedbackPoints)` — feedback copy tiers
 - `intro` — `{ title, description, steps, buttonLabel, footnote }` for the
   intro card (`steps`/`footnote` are optional and simply omitted if empty)
 
@@ -57,11 +56,30 @@ Fisher–Yates `shuffle()` at `start()` and re-shuffled once the shuffled order
 is exhausted in `next()`.
 
 **Known pitfall**: don't call `setScore`/`setRounds`/etc. from inside another
-state setter's functional updater (e.g. from inside `setChecks(cur => ...)`).
-React StrictMode double-invokes functional updaters to catch exactly this kind
-of impurity, which previously caused `reveal()` to award points twice in dev.
-`reveal()` now reads `checks` directly from closure instead — keep that
-pattern when touching this file.
+state setter's functional updater (e.g. from inside a `setAnswers(cur => ...)`
+callback). React StrictMode double-invokes functional updaters to catch
+exactly this kind of impurity, which previously caused `reveal()` to award
+points twice in dev. `reveal()` reads `answers` directly from closure instead
+— keep that pattern when touching this file.
+
+### The Autofeedback questionnaire (reflect step)
+
+The reflect phase is a fixed, shared questionnaire — `src/data/autofeedback.js`
+— not something each page customizes (unlike `scenarios`). It's 6 multiple-
+choice questions grouped into 3 sections (`Conteúdo` ×1, `Postura` ×2,
+`Entonação` ×3), sourced from the team's research doc; each answer option
+carries its own specific feedback text plus a point value (best answer per
+question = 10, partial-credit/weak answers scale down to 0; max total = 60,
+`AUTOFEEDBACK_MAX_POINTS`). `SpeakingGame` imports this directly — it isn't
+passed as a prop.
+
+`isAutofeedbackComplete(answers)` gates the reveal button (all 6 must be
+answered — `answers` is `{ [questionId]: selectedOptionId }`, single-select
+per question, no partial submission). `computeAutofeedbackPoints(answers)`
+sums the selected options' points and feeds into the page's `computeGain`/
+`feedbackFor`. `feedbackItemsFor(answers)` returns the flattened per-question
+feedback list rendered in the reveal phase (`.su-af-results`), shown
+alongside — not replacing — the scenario-specific "Técnica do dia" card.
 
 Per-page scenario/format data lives in `src/data/` (`homeScenarios.js`,
 `treinoScenarios.js` — which also exports the `formats` list for

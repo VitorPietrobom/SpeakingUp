@@ -3,7 +3,6 @@ import Footer from '../components/Footer.jsx'
 import SpeakingGame from '../components/SpeakingGame.jsx'
 import {
   treinoScenarios,
-  treinoCheckLabels,
   treinoComputeGain,
   treinoFeedbackFor,
   formats,
@@ -51,7 +50,6 @@ export default function Treinamento() {
             scenarios={treinoScenarios}
             prepTime={60}
             speakTime={60}
-            checkLabels={treinoCheckLabels}
             computeGain={treinoComputeGain}
             feedbackFor={treinoFeedbackFor}
             intro={gameIntro}

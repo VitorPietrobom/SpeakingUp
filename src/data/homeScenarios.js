@@ -122,20 +122,15 @@ export const homeScenarios = [
   },
 ]
 
-export const homeCheckLabels = [
-  'Falei sem travar no começo',
-  'Mantive uma ideia central clara',
-  'Olhei pra frente / postura firme',
-  'Fechei a fala com convicção',
-]
-
-export function homeComputeGain(checksCount) {
-  return 30 + checksCount * 15
+// computeGain/feedbackFor now take the Autofeedback questionnaire's total
+// points (0-60, see src/data/autofeedback.js) instead of a checkbox count.
+export function homeComputeGain(autofeedbackPoints) {
+  return 20 + autofeedbackPoints
 }
 
-export function homeFeedbackFor(n) {
-  if (n >= 4) return 'Mandou muito bem! Quando quase tudo flui, é sinal de que o treino tá pegando. Bora subir a dificuldade.'
-  if (n >= 2) return 'Bom progresso! Você acertou pontos importantes — repita o desafio focando no que faltou.'
-  if (n >= 1) return 'Todo começo conta. Marcar um ponto já é mais do que ficar calada. A próxima vem mais solta.'
+export function homeFeedbackFor(points) {
+  if (points >= 50) return 'Mandou muito bem! Quando quase tudo flui, é sinal de que o treino tá pegando. Bora subir a dificuldade.'
+  if (points >= 30) return 'Bom progresso! Você acertou pontos importantes — repita o desafio focando no que faltou.'
+  if (points >= 10) return 'Todo começo conta. Cada resposta honesta já é mais do que ficar calada. A próxima vem mais solta.'
   return 'Falar é o primeiro passo, e você deu. Sem cobrança: repita o mesmo desafio e veja a diferença.'
 }
