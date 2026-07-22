@@ -60,7 +60,7 @@ export default function Home() {
             <div>
               <span className="su-eyebrow-pill">
                 <span className="su-eyebrow-dot" />
-                Uma iniciativa de alunos, para alunos
+                Uma iniciativa de jovens, para jovens
               </span>
               <h1 className="su-hero-title">
                 Sua ideia é boa.
@@ -172,9 +172,9 @@ export default function Home() {
         <div className="su-wrap su-team-inner">
           <div className="su-team-intro">
             <span className="su-eyebrow">Quem somos nós</span>
-            <h2>Feito por alunos, para alunos.</h2>
+            <h2>Feito por jovens, para jovens.</h2>
             <p>
-              Somos uma iniciativa pensada por alunos para alunos, com o objetivo de ajudar a melhorar a comunicação
+              Somos uma iniciativa pensada por jovens para jovens, com o objetivo de ajudar a melhorar a comunicação
               pública e formal — pensando nos ambientes estudantis e no ingresso no mercado de trabalho. Tudo num
               ambiente seguro e de fácil acesso.
             </p>
