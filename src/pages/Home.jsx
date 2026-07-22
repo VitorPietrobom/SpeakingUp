@@ -60,7 +60,7 @@ export default function Home() {
             <div>
               <span className="su-eyebrow-pill">
                 <span className="su-eyebrow-dot" />
-                Uma iniciativa de alunos, para alunos
+                Uma iniciativa de jovens, para jovens
               </span>
               <h1 className="su-hero-title">
                 Sua ideia é boa.
